@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlankOS</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Comic Sans MS', cursive;
+        background-image: url('https://images.unsplash.com/photo-1686579809662-829e8374d0a8');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 2%;
+        width: 90%;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+        color: white;
+        font-size: 20px;
+    }
+    
+    .title {
+        position: fixed;
+        left: 42%;
+        top: 70%;
+        color: rgba(255, 255, 255, 0.6); /* Adjust alpha value for transparency */
+        transform: scale(1.8);
+        font-family: "Frutiger Aero", sans-serif;
+        user-select: none;
+    }
+    
+    .start-button {
+        display: inline-block;
+        background-image: url('https://raw.githubusercontent.com/koo1140/BlankOS/main/home-icon-ui-icon-basic-ui-icon-vector-logo-button-line-png-clipart-removebg-preview.png');
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+        margin-right: 20px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5); /* White glow aura effect */
+        filter: brightness(250%); /* Increase brightness for glowing effect */
+        transition: width 0.3s, height 0.3s, transform 0.3s;
+    }
+    
+    .start-button:hover {
+        transform: scale(1.1);
+    }
+    
+    .start-button:active {
+        transform: scale(0.9);
+    }
+
+    .taskbar:hover .start-button {
+        width: 40px; /* Resize width on hover */
+        height: 40px; /* Resize height on hover */
+    }
+
+    #time {
+        margin-left: 40px;
+        transition: font-size 0.3s, transform 0.3s; /* Smooth transition on font size changes */
+        user-select: none;
+    }
+    
+    #time:hover {
+        transform: scale(1.1);
+    }
+    
+    #time:active {
+        transform: scale(0.9);
+    }
+    
+    .taskbar:hover #time {
+        font-size: 24px; /* Resize font size on hover */
+    }
+
+    /* Start Menu Frame */
+    #startMenu {
+        position: fixed;
+        top: 60px; /* Adjust the top position */
+        left: 10px; /* Adjust the left position */
+        width: 200px;
+        height: 300px;
+        background-color: rgba(0, 0, 0, 0.7); /* Transparent background */
+        color: #fff;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        display: none; /* Initially hidden */
+        resize: both; /* Allow resizing */
+        padding: 10px; /* Add padding for better appearance */
+        overflow: hidden;
+    }
+
+    #closeButton {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        padding: 5px 10px;
+        background-color: gray;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        user-select: none;
+    }
+
+    #closeButton:hover {
+        background-color: darkgray;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <h1 class="title">BlankOS</h1>
+    <div class="taskbar">
+        <div class="start-button" id="startButton"></div>
+        <div id="time"></div>
+    </div>
+
+    <!-- Start Menu Frame -->
+    <div id="startMenu">
+        <div id="startMenuHeader" style="cursor: move; user-select: none;">᲼</div>
+        <button id="closeButton">X</button>
+        <!-- Add your start menu content here -->
+        nothing here yet
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to update the time display
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('time').textContent = hours + ':' + minutes + ':' + seconds;
+        }
+
+        // Initial call to updateTime and setting up the interval to update time every second
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        document.getElementById('closeButton').addEventListener('click', function () {
+            var startMenu = document.getElementById('startMenu');
+            startMenu.style.display = 'none'; // Hide the start menu
+        });
+
+        // Function to make an element draggable
+        function makeDraggable(element) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            var header = document.getElementById('startMenuHeader');
+            header.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // Call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set the element's new position:
+                element.style.top = Math.max(0, (element.offsetTop - pos2)) + "px";
+                element.style.left = Math.max(0, (element.offsetLeft - pos1)) + "px";
+            }
+
+            function closeDragElement() {
+                // Stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Add event listener to start button and make start menu draggable
+        document.getElementById('startButton').addEventListener('click', function () {
+            var startMenu = document.getElementById('startMenu');
+            // Toggle the display of the start menu
+            if (startMenu.style.display === 'none') {
+                startMenu.style.display = 'block';
+                // Make the start menu draggable
+                makeDraggable(startMenu);
+            } else {
+                startMenu.style.display = 'none';
+            }
+        });
+
+        // Function to handle window resizing and set minimum size limit
+        window.addEventListener('resize', function () {
+    var startMenu = document.getElementById('startMenu');
+    var minWidth = 200; // Minimum width
+    var minHeight = 100; // Minimum height
+
+    // Check if the current width is less than the minimum width
+    if (startMenu.offsetWidth < minWidth) {
+        startMenu.style.width = minWidth + 'px'; // Set the width to the minimum width
+    }
+
+    // Check if the current height is less than the minimum height
+    if (startMenu.offsetHeight < minHeight) {
+        startMenu.style.height = minHeight + 'px'; // Set the height to the minimum height
+    }
+});
+    });
+</script>
+
+</body>
+</html>
