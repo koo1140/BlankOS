@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlankOS</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Comic Sans MS', cursive;
+        background-image: url('https://images.unsplash.com/photo-1686579809662-829e8374d0a8');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+    }
+    
+    .taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 2%;
+        width: 90%;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+        color: white;
+        font-size: 20px;
+    }
+
+    .start-button {
+    display: inline-block;
+    background-image: url('https://raw.githubusercontent.com/koo1140/BlankOS/main/home-icon-ui-icon-basic-ui-icon-vector-logo-button-line-png-clipart-removebg-preview.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5); /* White glow aura effect */
+    filter: brightness(250%); /* Increase brightness for glowing effect */
+    transition: width 0.3s, height 0.3s, transform 0.3s;
+}
+.start-button:hover {
+  transform: scale(1.1);
+}
+.start-button:active {
+  transform: scale(0.9);
+}
+    .taskbar:hover .start-button {
+    width: 40px; /* Resize width on hover */
+    height: 40px; /* Resize height on hover */
+}
+
+#time {
+    margin-left: 40px;
+    transition: font-size 0.3s, transform 0.3s; /* Smooth transition on font size changes */
+}
+#time:hover {
+  transform: scale(1.1);
+}
+#time:active {
+  transform: scale(0.9);
+}
+.taskbar:hover #time {
+    font-size: 24px; /* Resize font size on hover */
+}
+</style>
+</head>
+<body>
+    <div class="taskbar">
+        <div class="start-button"></div>
+        <div id="time"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateTime() {
+                var now = new Date();
+                var hours = now.getHours().toString().padStart(2, '0');
+                var minutes = now.getMinutes().toString().padStart(2, '0');
+                var seconds = now.getSeconds().toString().padStart(2, '0');
+                document.getElementById('time').textContent = hours + ':' + minutes + ':' + seconds;
+            }
+
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+    </script>
+</body>
+</html>
